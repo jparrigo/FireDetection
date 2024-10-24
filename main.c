@@ -6,12 +6,8 @@
 
 #define	TAMANHO	30
 
-struct arg_struct {
-  int row;
-  int col;
-} args;
-
 char floresta[TAMANHO][TAMANHO];
+int numero_combates_fogo = 0;
 pthread_mutex_t floresta_mutex;
 
 void iniciar_floresta() {
@@ -26,6 +22,7 @@ void iniciar_floresta() {
 void print_matriz(int tick) {
   system("clear");
   printf("ATUALIZOU %d VEZ!\n",tick);
+  printf("COMBATEU %d AREAS COM FOGO!\n",numero_combates_fogo);
   for (int x = 0; x < TAMANHO; x++) {
     for (int y = 0; y < TAMANHO; y++) {
       printf("| %c ",floresta[x][y]);
@@ -37,21 +34,22 @@ void print_matriz(int tick) {
 int main (void) {
   printf("Fire Detection\n");
   iniciar_floresta();
+  print_matriz(0);
+  sleep(2);
   pthread_mutex_init(&floresta_mutex, NULL);
 
   pthread_t sensores[TAMANHO][TAMANHO];
   pthread_t thread_gerador_fogo, thread_controlador;
   
-
   for (int x = 0; x < TAMANHO; x++) {
     for (int y = 0; y < TAMANHO; y++) {
-      args.col = y;
-      args.row = x;
-      pthread_create(&sensores[x][y], NULL, verifica_sensor,(void *)&args);
+      pthread_create(&sensores[x][y], NULL, verifica_sensor,(void *)(intptr_t)(x * TAMANHO + y));
     }
   }
 
   pthread_create(&thread_gerador_fogo, NULL, gerar_fogo, NULL);
+
+  pthread_create(&thread_controlador, NULL, controle_floresta, NULL);
 
   int time = 0;
   while(1) {
