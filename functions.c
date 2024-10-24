@@ -33,3 +33,18 @@ void* verifica_sensor(void* args) {
 
   return NULL;
 }
+
+void* gerar_fogo(void* args) {
+  while(1) {
+    
+    int col = rand() % TAMANHO;
+    int row = rand() % TAMANHO;
+
+    pthread_mutex_lock(&floresta_mutex);
+    if (floresta[row][col] == '-') {
+      floresta[row][col] = '@';
+    }
+    pthread_mutex_unlock(&floresta_mutex);
+    sleep(3);
+  }
+}

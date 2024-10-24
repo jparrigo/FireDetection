@@ -8,7 +8,7 @@
 
 // Protótipos das funções
 void* verifica_sensor(void* args);         // Função para os nós sensores
-//void* fire_generator(void* arg);      // Função para a thread geradora de incêndios
+void* gerar_fogo(void* args);      // Função para a thread geradora de incêndios
 //void* central_control(void* arg);     // Função para a central de controle
 //void propagate_fire(int row, int col); // Função para propagar o fogo
 

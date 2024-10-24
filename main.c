@@ -50,11 +50,14 @@ int main (void) {
       pthread_create(&sensores[x][y], NULL, verifica_sensor,(void *)&args);
     }
   }
+
+  pthread_create(&thread_gerador_fogo, NULL, gerar_fogo, NULL);
+
   int time = 0;
   while(1) {
     time = time + 1;
     print_matriz(time);
-    usleep(2000000);
+    sleep(1);
   }
 
   return 0;
